@@ -7,480 +7,523 @@
   <meta name="description" content="Site Reliability Engineer specialising in observability, infrastructure, and automation." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     :root {
-      --red-400: #E24B4A;
-      --red-600: #A32D2D;
-      --red-800: #791F1F;
+      --r4: #E24B4A;
+      --r6: #A32D2D;
       --bg:  #0a0a0a;
-      --bg2: #111111;
+      --bg2: #0f0f0f;
       --bg3: #181818;
       --bg4: #222222;
       --text:  #f5f0f0;
       --text2: #a89898;
       --text3: #5c4f4f;
       --border: rgba(226,75,74,0.15);
+      --sidebar-w: 260px;
     }
 
-    html { scroll-behavior: smooth; }
-
-    body {
+    html, body {
+      height: 100%;
       background: var(--bg);
       color: var(--text);
-      font-family: 'Inter', system-ui, sans-serif;
-      font-size: 16px;
-      line-height: 1.6;
+      font-family: 'DM Sans', system-ui, sans-serif;
+    }
+
+    /* ── LAYOUT ── */
+    .layout {
+      display: grid;
+      grid-template-columns: var(--sidebar-w) 1fr;
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
-    nav {
+    /* ── SIDEBAR ── */
+    .sidebar {
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.25rem 2rem;
-      border-bottom: 1px solid var(--border);
-      background: rgba(10,10,10,0.97);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(8px);
+      flex-direction: column;
+      padding: 2.5rem 1.75rem;
+      overflow-y: auto;
     }
-    .logo { font-size: 15px; font-weight: 500; color: var(--red-400); letter-spacing: 0.04em; }
-    .nav-links { display: flex; gap: 2rem; }
-    .nav-links a {
-      font-size: 13px;
-      color: var(--text2);
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--red-400); }
 
-    /* ── HERO ── */
-    .hero {
-      padding: 6rem 2rem 5rem;
-      max-width: 900px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
-    }
-    .hero-bg {
+    .sidebar-accent {
       position: absolute;
-      top: -80px; right: -80px;
-      width: 500px; height: 500px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(226,75,74,0.09) 0%, transparent 70%);
-      pointer-events: none;
+      top: 0; left: 0;
+      width: 2px;
+      height: 100%;
+      background: linear-gradient(to bottom, var(--r6), transparent 80%);
     }
-    .hero-bg2 {
-      position: absolute;
-      bottom: -60px; left: -60px;
-      width: 300px; height: 300px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(163,45,45,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-    h1 {
-      font-size: clamp(42px, 7vw, 64px);
+
+    .name {
+      font-size: 30px;
       font-weight: 500;
+      color: var(--text);
+      letter-spacing: -0.025em;
       line-height: 1.05;
-      margin-bottom: 0.75rem;
-      letter-spacing: -0.02em;
+      margin-bottom: 4px;
     }
-    h1 span { color: var(--red-400); }
-    .hero-sub { font-size: 18px; color: var(--text2); margin-bottom: 1rem; font-weight: 400; }
-    .hero-desc {
-      font-size: 15px;
+    .name em { color: var(--r4); font-style: normal; display: block; }
+
+    .role {
+      font-size: 10px;
       color: var(--text3);
-      max-width: 520px;
-      line-height: 1.8;
-      margin-bottom: 2.5rem;
-    }
-    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-    .btn-primary {
-      padding: 10px 24px;
-      background: var(--red-600);
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: background 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-primary:hover { background: var(--red-400); }
-    .btn-ghost {
-      padding: 10px 24px;
-      background: transparent;
-      color: var(--text2);
-      border: 1px solid rgba(226,75,74,0.25);
-      border-radius: 8px;
-      font-size: 14px;
-      font-family: inherit;
-      cursor: pointer;
-      letter-spacing: 0.02em;
-      transition: all 0.2s;
-      text-decoration: none;
-      display: inline-block;
-    }
-    .btn-ghost:hover { border-color: var(--red-400); color: var(--red-400); }
-
-    /* ── LAYOUT ── */
-    .divider { height: 1px; background: var(--border); max-width: 900px; margin: 0 auto; }
-    section { padding: 4rem 2rem; max-width: 900px; margin: 0 auto; }
-
-    .section-label {
-      font-size: 11px;
-      color: var(--red-400);
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      margin-bottom: 0.4rem;
-    }
-    .section-title {
-      font-size: 28px;
-      font-weight: 500;
-      margin-bottom: 2rem;
-      letter-spacing: -0.01em;
+      padding-bottom: 1.75rem;
+      margin-bottom: 1.75rem;
+      border-bottom: 1px solid var(--border);
     }
 
-    /* ── ABOUT ── */
-    .about-grid {
+    .sidenav {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-bottom: 2rem;
+    }
+
+    .sidenav a {
+      font-size: 13px;
+      color: var(--text3);
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .sidenav a i { font-size: 16px; color: var(--text3); transition: color 0.2s; }
+    .sidenav a:hover { color: var(--text); background: rgba(226,75,74,0.08); }
+    .sidenav a:hover i { color: var(--r4); }
+    .sidenav a.active { color: var(--text); background: rgba(226,75,74,0.1); }
+    .sidenav a.active i { color: var(--r4); }
+    .sidenav a.active::before {
+      content: '';
+      position: absolute;
+      left: 0; top: 50%;
+      transform: translateY(-50%);
+      width: 2px; height: 16px;
+      background: var(--r4);
+      border-radius: 2px;
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      padding-top: 1.75rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .ss-link {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 12px;
+      color: var(--text3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .ss-link i { font-size: 15px; color: var(--r4); }
+    .ss-link:hover { color: var(--r4); }
+
+    /* ── MAIN ── */
+    .main {
+      margin-left: var(--sidebar-w);
+      min-height: 100vh;
+    }
+
+    section {
+      padding: 4rem 3.5rem;
+      border-bottom: 1px solid var(--border);
+      max-width: 860px;
+    }
+    section:last-of-type { border-bottom: none; }
+
+    .sec-label {
+      font-size: 10px;
+      color: var(--r4);
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .sec-title {
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 2rem;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── HERO ── */
+    #about .hero-text {
+      font-size: 15px;
+      color: var(--text2);
+      line-height: 1.9;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+    #about .hero-text p + p { margin-top: 1rem; }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      max-width: 600px;
+    }
+    .stat {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.1rem;
+    }
+    .stat-n { font-size: 26px; font-weight: 500; color: var(--r4); line-height: 1; margin-bottom: 4px; }
+    .stat-l { font-size: 11px; color: var(--text3); }
+
+    /* ── SKILLS ── */
+    .skill-group { margin-bottom: 1.75rem; }
+    .sg-label {
+      font-size: 10px;
+      color: var(--r4);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      background: var(--bg3);
+      border: 1px solid rgba(226,75,74,0.12);
+      border-radius: 8px;
+      padding: 8px 13px;
+      font-size: 13px;
+      color: var(--text2);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .chip:hover { border-color: var(--r4); background: rgba(226,75,74,0.05); }
+    .chip.f { border-color: rgba(226,75,74,0.3); background: rgba(226,75,74,0.07); }
+    .chip.f .dot { background: var(--r4); }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
+
+    /* ── PROJECTS ── */
+    .projects {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .pcard {
+      background: var(--bg3);
+      border: 1px solid rgba(226,75,74,0.12);
+      border-radius: 12px;
+      padding: 1.4rem;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, background 0.25s;
+    }
+    .pcard::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--r6);
+      opacity: 0;
+      transition: opacity 0.25s;
+    }
+    .pcard:hover { border-color: rgba(226,75,74,0.4); background: rgba(226,75,74,0.03); }
+    .pcard:hover::before { opacity: 1; }
+    .ptop { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+    .picon {
+      width: 34px; height: 34px;
+      border-radius: 8px;
+      background: rgba(226,75,74,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 17px;
+      color: var(--r4);
+    }
+    .ptag {
+      font-size: 10px;
+      color: var(--r4);
+      background: rgba(226,75,74,0.08);
+      border: 1px solid rgba(226,75,74,0.18);
+      border-radius: 20px;
+      padding: 2px 10px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .ptitle { font-size: 14px; font-weight: 500; margin-bottom: 5px; color: var(--text); }
+    .pdesc { font-size: 12px; color: var(--text3); line-height: 1.7; }
+    .ptechs { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+    .ptech { font-size: 11px; color: var(--text3); background: var(--bg4); border-radius: 4px; padding: 2px 8px; }
+
+    /* ── CONTACT ── */
+    .contact-wrap {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2.5rem;
       align-items: start;
     }
-    .about-text { font-size: 15px; color: var(--text2); line-height: 1.9; }
-    .about-text p + p { margin-top: 1rem; }
-    .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    .stat {
-      background: var(--bg3);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-    .stat-num { font-size: 30px; font-weight: 500; color: var(--red-400); line-height: 1; margin-bottom: 4px; }
-    .stat-label { font-size: 12px; color: var(--text3); letter-spacing: 0.03em; }
-
-    /* ── SKILLS ── */
-    .skill-group { margin-bottom: 1.75rem; }
-    .skill-group-label {
-      font-size: 11px;
-      color: var(--red-400);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 0.75rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .skills-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-    .skill-chip {
-      background: var(--bg3);
-      border: 1px solid rgba(226,75,74,0.12);
-      border-radius: 10px;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      transition: border-color 0.2s, background 0.2s;
-    }
-    .skill-chip:hover { border-color: var(--red-400); background: rgba(226,75,74,0.05); }
-    .skill-chip.featured { border-color: rgba(226,75,74,0.3); background: rgba(226,75,74,0.06); }
-    .skill-chip.featured .skill-dot { background: var(--red-400); }
-    .skill-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--text3); flex-shrink: 0; }
-    .skill-name { font-size: 13px; color: var(--text2); }
-
-    /* ── PROJECTS ── */
-    .projects-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-    .project-card {
-      background: var(--bg3);
-      border: 1px solid rgba(226,75,74,0.12);
-      border-radius: 14px;
-      padding: 1.5rem;
-      transition: border-color 0.25s, background 0.25s;
-      position: relative;
-      overflow: hidden;
-    }
-    .project-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 2px;
-      background: var(--red-600);
-      opacity: 0;
-      transition: opacity 0.25s;
-    }
-    .project-card:hover { border-color: rgba(226,75,74,0.4); background: rgba(226,75,74,0.03); }
-    .project-card:hover::before { opacity: 1; }
-    .project-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; }
-    .project-icon {
-      width: 36px; height: 36px;
-      border-radius: 8px;
-      background: rgba(226,75,74,0.12);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
-      color: var(--red-400);
-    }
-    .project-tag {
-      font-size: 10px;
-      color: var(--red-400);
-      background: rgba(226,75,74,0.08);
-      border: 1px solid rgba(226,75,74,0.2);
-      border-radius: 20px;
-      padding: 2px 10px;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      align-self: flex-start;
-    }
-    .project-title { font-size: 15px; font-weight: 500; margin-bottom: 0.5rem; color: var(--text); }
-    .project-desc { font-size: 13px; color: var(--text3); line-height: 1.7; }
-    .project-footer { margin-top: 1rem; display: flex; gap: 8px; flex-wrap: wrap; }
-    .project-tech {
-      font-size: 11px;
-      color: var(--text3);
-      background: var(--bg4);
-      border-radius: 4px;
-      padding: 2px 8px;
-    }
-
-    /* ── CONTACT ── */
-    .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: start; }
     .contact-text { font-size: 15px; color: var(--text2); line-height: 1.9; }
     .social-links { display: flex; flex-direction: column; gap: 10px; }
-    .social-link {
+    .slink {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 12px 16px;
+      padding: 11px 15px;
       background: var(--bg3);
       border: 1px solid rgba(226,75,74,0.12);
       border-radius: 10px;
       color: var(--text2);
-      font-size: 14px;
+      font-size: 13px;
       font-family: inherit;
-      transition: all 0.2s;
       text-decoration: none;
+      transition: all 0.2s;
     }
-    .social-link:hover { border-color: var(--red-400); color: var(--red-400); background: rgba(226,75,74,0.05); }
-    .social-link i { font-size: 18px; color: var(--red-400); flex-shrink: 0; }
+    .slink:hover { border-color: var(--r4); color: var(--r4); background: rgba(226,75,74,0.05); }
+    .slink i { font-size: 17px; color: var(--r4); flex-shrink: 0; }
 
     /* ── FOOTER ── */
     footer {
-      padding: 1.5rem 2rem;
+      padding: 1.5rem 3.5rem;
       border-top: 1px solid var(--border);
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 900px;
-      margin: 0 auto;
+      margin-left: var(--sidebar-w);
     }
-    .footer-text { font-size: 12px; color: var(--text3); }
-    .footer-dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--red-600);
-      display: inline-block;
-      margin-right: 6px;
-    }
+    .ft { font-size: 12px; color: var(--text3); }
+    .fdot { width: 5px; height: 5px; border-radius: 50%; background: var(--r6); display: inline-block; margin-right: 6px; }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 640px) {
-      .about-grid, .projects-grid, .contact-wrap { grid-template-columns: 1fr; }
-      .nav-links { gap: 1.25rem; }
-      h1 { font-size: 36px; }
-      footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar { display: none; }
+      .main, footer { margin-left: 0; }
+      .stats { grid-template-columns: 1fr 1fr; }
+      .projects { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; }
+      section { padding: 2.5rem 1.5rem; }
+      footer { padding: 1.25rem 1.5rem; flex-direction: column; gap: 6px; text-align: center; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="logo">ML</div>
-    <div class="nav-links">
-      <a href="#about">About</a>
-      <a href="#skills">Skills</a>
-      <a href="#projects">Projects</a>
-      <a href="#contact">Contact</a>
-    </div>
-  </nav>
+  <div class="layout">
 
-  <!-- HERO -->
-  <div class="hero">
-    <div class="hero-bg"></div>
-    <div class="hero-bg2"></div>
-    <h1>Michal<br><span>Labaj</span></h1>
-    <p class="hero-sub">Site Reliability Engineer</p>
-    <p class="hero-desc">Building resilient infrastructure and keeping systems running at scale. Passionate about observability, automation, and the invisible art of uptime.</p>
-    <div class="hero-btns">
-      <a href="#projects" class="btn-primary">View my work</a>
-      <a href="#contact" class="btn-ghost">Get in touch</a>
-    </div>
-  </div>
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-accent"></div>
+      <div class="name">Michal<br><em>Labaj</em></div>
+      <div class="role">Site Reliability Engineer</div>
 
-  <div class="divider"></div>
-
-  <!-- ABOUT -->
-  <section id="about">
-    <p class="section-label">About me</p>
-    <h2 class="section-title">Who I am</h2>
-    <div class="about-grid">
-      <div class="about-text">
-        <p>I'm a Site Reliability Engineer with a deep focus on observability. I've built and owned the full observability stack at my company — from metrics pipelines to dashboards that engineers actually use.</p>
-        <p>When I'm not tuning Grafana dashboards or wrangling log pipelines, I'm automating everything I can get my hands on and obsessing over making complex systems legible.</p>
-      </div>
-      <div class="stats">
-        <div class="stat"><div class="stat-num">99.9%</div><div class="stat-label">Uptime target</div></div>
-        <div class="stat"><div class="stat-num">5+</div><div class="stat-label">Years experience</div></div>
-        <div class="stat"><div class="stat-num">∞</div><div class="stat-label">Incidents resolved</div></div>
-        <div class="stat"><div class="stat-num">0</div><div class="stat-label">Unsolved problems</div></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- SKILLS -->
-  <section id="skills">
-    <p class="section-label">Expertise</p>
-    <h2 class="section-title">Skills & tools</h2>
-
-    <div class="skill-group">
-      <div class="skill-group-label">Observability — core focus</div>
-      <div class="skills-grid">
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">Grafana</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">Grafana Alloy</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">Loki</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">Prometheus</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">Zabbix</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">ELK Stack</span></div>
-        <div class="skill-chip featured"><div class="skill-dot"></div><span class="skill-name">AppDynamics</span></div>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-label">Infrastructure & platforms</div>
-      <div class="skills-grid">
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Kubernetes</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Terraform</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">AWS / GCP</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Docker</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Linux</span></div>
-      </div>
-    </div>
-
-    <div class="skill-group">
-      <div class="skill-group-label">Automation & practices</div>
-      <div class="skills-grid">
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Python</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">CI/CD</span></div>
-        <div class="skill-chip"><div class="skill-dot"></div><span class="skill-name">Incident management</span></div>
-      </div>
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- PROJECTS -->
-  <section id="projects">
-    <p class="section-label">Work</p>
-    <h2 class="section-title">Projects</h2>
-    <div class="projects-grid">
-
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
-          <span class="project-tag">Observability</span>
-        </div>
-        <div class="project-title">Company Observability Stack</div>
-        <div class="project-desc">Designed and built the full observability platform from the ground up — metrics, logs, and traces — giving engineering teams real-time visibility into their systems.</div>
-        <div class="project-footer">
-          <span class="project-tech">Grafana</span>
-          <span class="project-tech">Alloy</span>
-          <span class="project-tech">Loki</span>
-          <span class="project-tech">Prometheus</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon"><i class="ti ti-eye" aria-hidden="true"></i></div>
-          <span class="project-tag">Monitoring</span>
-        </div>
-        <div class="project-title">Zabbix Data Collection Platform</div>
-        <div class="project-desc">Built a comprehensive data collection layer in Zabbix covering infrastructure, network devices, and application health across the entire environment.</div>
-        <div class="project-footer">
-          <span class="project-tech">Zabbix</span>
-          <span class="project-tech">Python</span>
-          <span class="project-tech">Grafana</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon"><i class="ti ti-server" aria-hidden="true"></i></div>
-          <span class="project-tag">Log management</span>
-        </div>
-        <div class="project-title">Centralised Log Pipeline</div>
-        <div class="project-desc">Unified log ingestion across services using the ELK Stack, enabling fast full-text search, alerting, and long-term retention at scale.</div>
-        <div class="project-footer">
-          <span class="project-tech">Elasticsearch</span>
-          <span class="project-tech">Logstash</span>
-          <span class="project-tech">Kibana</span>
-        </div>
-      </div>
-
-      <div class="project-card">
-        <div class="project-top">
-          <div class="project-icon"><i class="ti ti-activity" aria-hidden="true"></i></div>
-          <span class="project-tag">APM</span>
-        </div>
-        <div class="project-title">Application Performance Monitoring</div>
-        <div class="project-desc">Implemented AppDynamics across critical application tiers, providing deep transaction tracing and business impact analysis for SLA reporting.</div>
-        <div class="project-footer">
-          <span class="project-tech">AppDynamics</span>
-          <span class="project-tech">SLA tracking</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <div class="divider"></div>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <p class="section-label">Contact</p>
-    <h2 class="section-title">Let's connect</h2>
-    <div class="contact-wrap">
-      <div class="contact-text">
-        Whether you're looking to collaborate, have a question about observability, or just want to talk infrastructure — my inbox is open.
-      </div>
-      <div class="social-links">
-        <a class="social-link" href="https://github.com/LabajM" target="_blank" rel="noopener noreferrer">
-          <i class="ti ti-brand-github" aria-hidden="true"></i>github.com/LabajM
+      <nav class="sidenav">
+        <a href="#about" class="active">
+          <i class="ti ti-user" aria-hidden="true"></i>About
         </a>
-        <a class="social-link" href="https://www.linkedin.com/in/michal-labaj-a85181129/" target="_blank" rel="noopener noreferrer">
-          <i class="ti ti-brand-linkedin" aria-hidden="true"></i>linkedin.com/in/michal-labaj
+        <a href="#skills">
+          <i class="ti ti-tool" aria-hidden="true"></i>Skills
         </a>
-        <a class="social-link" href="mailto:michal@labaj.ca">
+        <a href="#projects">
+          <i class="ti ti-briefcase" aria-hidden="true"></i>Projects
+        </a>
+        <a href="#contact">
+          <i class="ti ti-mail" aria-hidden="true"></i>Contact
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a class="ss-link" href="https://github.com/LabajM" target="_blank" rel="noopener noreferrer">
+          <i class="ti ti-brand-github" aria-hidden="true"></i>GitHub
+        </a>
+        <a class="ss-link" href="https://www.linkedin.com/in/michal-labaj-a85181129/" target="_blank" rel="noopener noreferrer">
+          <i class="ti ti-brand-linkedin" aria-hidden="true"></i>LinkedIn
+        </a>
+        <a class="ss-link" href="mailto:michal@labaj.ca">
           <i class="ti ti-mail" aria-hidden="true"></i>michal@labaj.ca
         </a>
       </div>
-    </div>
-  </section>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main">
+
+      <!-- ABOUT -->
+      <section id="about">
+        <p class="sec-label">About me</p>
+        <h1 class="sec-title">Who I am</h1>
+        <div class="hero-text">
+          <p>I'm a Site Reliability Engineer with a deep focus on observability. I've built and owned the full observability stack at my company — from metrics pipelines to dashboards that engineers actually use.</p>
+          <p>When I'm not tuning Grafana dashboards or wrangling log pipelines, I'm automating everything I can get my hands on and obsessing over making complex systems legible.</p>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-n">99.9%</div><div class="stat-l">Uptime target</div></div>
+          <div class="stat"><div class="stat-n">5+</div><div class="stat-l">Years experience</div></div>
+          <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Incidents resolved</div></div>
+          <div class="stat"><div class="stat-n">0</div><div class="stat-l">Unsolved problems</div></div>
+        </div>
+      </section>
+
+      <!-- SKILLS -->
+      <section id="skills">
+        <p class="sec-label">Expertise</p>
+        <h2 class="sec-title">Skills & tools</h2>
+
+        <div class="skill-group">
+          <div class="sg-label">Observability — core focus</div>
+          <div class="chips">
+            <div class="chip f"><div class="dot"></div>Grafana</div>
+            <div class="chip f"><div class="dot"></div>Grafana Alloy</div>
+            <div class="chip f"><div class="dot"></div>Loki</div>
+            <div class="chip f"><div class="dot"></div>Prometheus</div>
+            <div class="chip f"><div class="dot"></div>Zabbix</div>
+            <div class="chip f"><div class="dot"></div>ELK Stack</div>
+            <div class="chip f"><div class="dot"></div>AppDynamics</div>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-label">Infrastructure & platforms</div>
+          <div class="chips">
+            <div class="chip"><div class="dot"></div>Kubernetes</div>
+            <div class="chip"><div class="dot"></div>Terraform</div>
+            <div class="chip"><div class="dot"></div>AWS / GCP</div>
+            <div class="chip"><div class="dot"></div>Docker</div>
+            <div class="chip"><div class="dot"></div>Linux</div>
+          </div>
+        </div>
+
+        <div class="skill-group">
+          <div class="sg-label">Automation & practices</div>
+          <div class="chips">
+            <div class="chip"><div class="dot"></div>Python</div>
+            <div class="chip"><div class="dot"></div>CI/CD</div>
+            <div class="chip"><div class="dot"></div>Incident management</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section id="projects">
+        <p class="sec-label">Work</p>
+        <h2 class="sec-title">Projects</h2>
+        <div class="projects">
+
+          <div class="pcard">
+            <div class="ptop">
+              <div class="picon"><i class="ti ti-chart-bar" aria-hidden="true"></i></div>
+              <span class="ptag">Observability</span>
+            </div>
+            <div class="ptitle">Company Observability Stack</div>
+            <div class="pdesc">Designed and built the full observability platform from the ground up — metrics, logs, and traces — giving engineering teams real-time visibility into their systems.</div>
+            <div class="ptechs">
+              <span class="ptech">Grafana</span>
+              <span class="ptech">Alloy</span>
+              <span class="ptech">Loki</span>
+              <span class="ptech">Prometheus</span>
+            </div>
+          </div>
+
+          <div class="pcard">
+            <div class="ptop">
+              <div class="picon"><i class="ti ti-eye" aria-hidden="true"></i></div>
+              <span class="ptag">Monitoring</span>
+            </div>
+            <div class="ptitle">Zabbix Data Collection Platform</div>
+            <div class="pdesc">Built a comprehensive data collection layer in Zabbix covering infrastructure, network devices, and application health across the entire environment.</div>
+            <div class="ptechs">
+              <span class="ptech">Zabbix</span>
+              <span class="ptech">Python</span>
+              <span class="ptech">Grafana</span>
+            </div>
+          </div>
+
+          <div class="pcard">
+            <div class="ptop">
+              <div class="picon"><i class="ti ti-server" aria-hidden="true"></i></div>
+              <span class="ptag">Log management</span>
+            </div>
+            <div class="ptitle">Centralised Log Pipeline</div>
+            <div class="pdesc">Unified log ingestion across services using the ELK Stack, enabling fast full-text search, alerting, and long-term retention at scale.</div>
+            <div class="ptechs">
+              <span class="ptech">Elasticsearch</span>
+              <span class="ptech">Logstash</span>
+              <span class="ptech">Kibana</span>
+            </div>
+          </div>
+
+          <div class="pcard">
+            <div class="ptop">
+              <div class="picon"><i class="ti ti-activity" aria-hidden="true"></i></div>
+              <span class="ptag">APM</span>
+            </div>
+            <div class="ptitle">Application Performance Monitoring</div>
+            <div class="pdesc">Implemented AppDynamics across critical application tiers, providing deep transaction tracing and business impact analysis for SLA reporting.</div>
+            <div class="ptechs">
+              <span class="ptech">AppDynamics</span>
+              <span class="ptech">SLA tracking</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section id="contact">
+        <p class="sec-label">Contact</p>
+        <h2 class="sec-title">Let's connect</h2>
+        <div class="contact-wrap">
+          <p class="contact-text">Whether you're looking to collaborate, have a question about observability, or just want to talk infrastructure — my inbox is open.</p>
+          <div class="social-links">
+            <a class="slink" href="https://github.com/LabajM" target="_blank" rel="noopener noreferrer">
+              <i class="ti ti-brand-github" aria-hidden="true"></i>github.com/LabajM
+            </a>
+            <a class="slink" href="https://www.linkedin.com/in/michal-labaj-a85181129/" target="_blank" rel="noopener noreferrer">
+              <i class="ti ti-brand-linkedin" aria-hidden="true"></i>linkedin.com/in/michal-labaj
+            </a>
+            <a class="slink" href="mailto:michal@labaj.ca">
+              <i class="ti ti-mail" aria-hidden="true"></i>michal@labaj.ca
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
 
   <footer>
-    <span class="footer-text"><span class="footer-dot"></span>Michal Labaj — Site Reliability Engineer</span>
-    <span class="footer-text">Built with GitHub Pages</span>
+    <span class="ft"><span class="fdot"></span>Michal Labaj — Site Reliability Engineer</span>
+    <span class="ft">Built with GitHub Pages</span>
   </footer>
+
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.sidenav a');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(a => a.classList.remove('active'));
+          const active = document.querySelector(`.sidenav a[href="#${entry.target.id}"]`);
+          if (active) active.classList.add('active');
+        }
+      });
+    }, { threshold: 0.4 });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
 
 </body>
 </html>
