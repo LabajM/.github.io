@@ -147,6 +147,7 @@
       padding: 4rem 3.5rem;
       border-bottom: 1px solid var(--border);
       max-width: 860px;
+      margin: 0 auto;
     }
     section:last-of-type { border-bottom: none; }
 
@@ -302,6 +303,7 @@
       justify-content: space-between;
       align-items: center;
       margin-left: var(--sidebar-w);
+      max-width: calc(860px + var(--sidebar-w));   /* ← matches content width */
     }
     .ft { font-size: 12px; color: var(--text3); }
     .fdot { width: 5px; height: 5px; border-radius: 50%; background: var(--r6); display: inline-block; margin-right: 6px; }
